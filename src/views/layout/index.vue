@@ -59,6 +59,7 @@ export default {
         // 用户选择确定
         // 清除vuex的数据
         this.$store.commit('updateToken', '')
+        this.$store.commit('updateUserInfo', '')
         // 跳转到登录页面
         this.$router.push('/login')
       }).catch(() => {
