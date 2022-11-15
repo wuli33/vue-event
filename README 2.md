@@ -25,5 +25,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ```
 yarn add element-ui 
-不能 npm uninstall element-ui
+```
+
+```
+yarn add vuex-persistedstate@3.2.1 
+持久化存储xuex
 ```

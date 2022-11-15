@@ -59,10 +59,12 @@ export default {
         if (vaild) {
           const { data: res } = await loginAPI(this.loginForm)
           if (res.code === 0) {
-            // 登录成功 提示跳转
+            // 登录成功 提示
             this.$message.success(res.message)
             // xuex存储token
             this.updateToken(res.token)
+            // 跳转到首页
+            this.$router.push('/')
           } else {
           // 登录失败
             return this.$message.error(res.message)
