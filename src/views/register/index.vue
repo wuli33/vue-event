@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item>
           <el-button class="btn-reg" type="primary" @click="registerFn">注册</el-button>
-          <el-link type="info">去登录</el-link>
+          <el-link type="info"  @click="$router.push('/login')">去登录</el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -74,7 +74,6 @@ export default {
         if (vaild) {
           // 通过检验 发送请求
           const { data: res } = await registerAPI(this.form)
-          console.log(res)
           // 注册失败 提示用户 element在vue的原型链上添加了弹窗提示，$message属性
           if (res.code !== 0) return this.$message.error(res.message)
           // 注册成功 提示用户
