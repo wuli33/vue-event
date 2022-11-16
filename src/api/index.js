@@ -19,3 +19,8 @@ export const getUserInfoAPI = () => {
   // this.$store.state.token  这里的this不是组件对象 不能用this.$store拿到store对象
   return request({ url: '/my/userinfo', method: 'GET', headers: { Authorization: store.state.token } })
 }
+
+// 获取侧边栏数据 method不写默认是get
+export const getMenusListAPI = () => {
+  return request({ url: '/my/menus', headers: { Authorization: store.state.token } })
+}

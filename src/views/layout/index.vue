@@ -18,16 +18,61 @@
             <img src="../../assets/images/logo.png" alt="" class="avatar" />
             <span>个人中心</span>
           </template>
-          <el-menu-item index="1-1"><i class="el-icon-s-operation"></i>基本资料</el-menu-item>
-          <el-menu-item index="1-2"><i class="el-icon-camera"></i>更换头像</el-menu-item>
-          <el-menu-item index="1-3"><i class="el-icon-key"></i>重置密码</el-menu-item>
+          <el-menu-item index="1-1"
+            ><i class="el-icon-s-operation"></i>基本资料</el-menu-item
+          >
+          <el-menu-item index="1-2"
+            ><i class="el-icon-camera"></i>更换头像</el-menu-item
+          >
+          <el-menu-item index="1-3"
+            ><i class="el-icon-key"></i>重置密码</el-menu-item
+          >
         </el-submenu>
-        <el-menu-item index="2" @click="quitFn"><i class="el-icon-switch-button"></i>退出</el-menu-item>
+        <el-menu-item index="2" @click="quitFn"
+          ><i class="el-icon-switch-button"></i>退出</el-menu-item
+        >
       </el-menu>
     </el-header>
     <!-- 侧边栏区域 -->
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
+      <el-aside width="200px">
+        <!-- 侧边栏区域   --  用户信息区域 -->
+        <div class="user-box">
+          <img :src="user_pic" alt="" v-if="user_pic" />
+          <img src="../../assets/images/avatar.jpg" alt="" v-else />
+          <span>欢迎 {{ nickname || username }}</span>
+        </div>
+        <!-- 侧边栏区域   --  菜单 -->
+        <!-- default-active当前激活菜单的 index -->
+        <el-menu
+          default-active="/home"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+          background-color="#23262E"
+          text-color="#fff"
+          active-text-color="#409EFF"
+          unique-opened
+          router
+        >
+          <template v-for="item in menus">
+            <el-menu-item v-if="!item.children" :index="item.indexPath" :key="item.indexPath">
+              <i :class="item.icon"></i>
+              <span slot="title">{{item.title}}</span>
+            </el-menu-item>
+            <el-submenu v-else :index="item.indexPath" :key="item.indexPath">
+              <template slot="title">
+                <i :class="item.icon"></i>
+                <span>{{item.title}}</span>
+              </template>
+              <el-menu-item v-for="obj,index in item.children" :index="obj.indexPath" :key="index">
+                <i :class="obj.icon"></i>
+                <span slot="title">{{obj.title}}</span>
+              </el-menu-item>
+            </el-submenu>
+          </template>
+        </el-menu>
+      </el-aside>
       <el-container>
         <!-- 页面主体区域 -->
         <el-main>Main</el-main>
@@ -39,15 +84,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { getMenusListAPI } from '@/api'
 export default {
   name: 'my-layout',
   components: {},
   props: {},
   data () {
-    return {}
+    return {
+      menus: [] // 侧边栏数据
+    }
   },
   watch: {},
-  computed: {},
+  computed: {
+    ...mapGetters(['nickname', 'username', 'user_pic'])
+  },
   methods: {
     // 退出登录
     quitFn () {
@@ -55,19 +106,38 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        // 用户选择确定
-        // 清除vuex的数据
-        this.$store.commit('updateToken', '')
-        this.$store.commit('updateUserInfo', '')
-        // 跳转到登录页面
-        this.$router.push('/login')
-      }).catch(() => {
-        // 用户选择取消
       })
+        .then(() => {
+          // 用户选择确定
+          // 清除vuex的数据
+          this.$store.commit('updateToken', '')
+          this.$store.commit('updateUserInfo', '')
+          // 跳转到登录页面
+          this.$router.push('/login')
+        })
+        .catch(() => {
+          // 用户选择取消
+        })
+    },
+
+    //
+    handleOpen (key, keyPath) {
+      console.log(key, keyPath)
+    },
+    handleClose (key, keyPath) {
+      console.log(key, keyPath)
+    },
+
+    // 获取侧边栏请求的方法
+    async getMenuListFn () {
+      const res = await getMenusListAPI()
+      this.menus = res.data.data
     }
   },
-  created () {},
+  created () {
+    // 请求侧边栏数据
+    this.getMenuListFn()
+  },
   mounted () {}
 }
 </script>
