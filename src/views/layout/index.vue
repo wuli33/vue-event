@@ -55,12 +55,12 @@
           unique-opened
           router
         >
-          <template v-for="item in menus">
-            <el-menu-item v-if="!item.children" :index="item.indexPath" :key="item.indexPath">
+          <template v-for="(item, index) in menus">
+            <el-menu-item v-if="!item.children" :index="item.indexPath" :key="index">
               <i :class="item.icon"></i>
               <span slot="title">{{item.title}}</span>
             </el-menu-item>
-            <el-submenu v-else :index="item.indexPath" :key="item.indexPath">
+            <el-submenu :index="item.indexPath" v-else :key="item.indexPath">
               <template slot="title">
                 <i :class="item.icon"></i>
                 <span>{{item.title}}</span>
@@ -75,7 +75,9 @@
       </el-aside>
       <el-container>
         <!-- 页面主体区域 -->
-        <el-main>Main</el-main>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
         <!-- 底部footer区域 -->
         <el-footer>Footer</el-footer>
       </el-container>

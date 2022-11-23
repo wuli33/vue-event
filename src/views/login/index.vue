@@ -53,7 +53,7 @@ export default {
   computed: {},
   methods: {
     ...mapMutations(['updateToken']),
-    // 电价登录事件
+    // 点击登录事件
     loginFn () {
       this.$refs.loginRef.validate(async vaild => {
         if (vaild) {
